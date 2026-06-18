@@ -46,7 +46,7 @@ public class ArchitectureCheckMojo extends AbstractMojo {
     );
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoFailureException {
         String outputDirectory = project.getBuild().getOutputDirectory();
         File classesDir = new File(outputDirectory);
 
@@ -79,7 +79,7 @@ public class ArchitectureCheckMojo extends AbstractMojo {
 
                 if (result.hasViolation()) {
                     failures++;
-                    failureDetails.add(rule.getClass().getSimpleName() + " : " + result.getFailureReport().toString());
+                    failureDetails.add(rule.getClass().getSimpleName() + " : " + result.getFailureReport());
                 }
             } catch (AssertionError e) {
                 // ✅ rule.check() throws AssertionError with the full ArchUnit message
