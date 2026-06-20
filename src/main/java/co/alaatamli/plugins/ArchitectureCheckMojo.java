@@ -38,15 +38,20 @@ public class ArchitectureCheckMojo extends AbstractMojo {
     @Parameter(property = "basePackage", defaultValue = "${project.groupId}")
     private String basePackage;
 
-    // Register all your rules here
+    //  All rules are registered here
     private final List<ArchitectureRule> rules = List.of(
             new HexagonalStructureRule(),
-            new DomainIsolationRule()
-            // Add future rules here as you write them!
-    );
+            new DomainIsolationRule());
 
     @Override
     public void execute() throws MojoFailureException {
+
+        var shouldContinue = this.checkAllowedPackaging();
+
+        if(!shouldContinue)
+            return;
+
+
         String outputDirectory = project.getBuild().getOutputDirectory();
         File classesDir = new File(outputDirectory);
 
@@ -116,4 +121,21 @@ public class ArchitectureCheckMojo extends AbstractMojo {
             getLog().info("");
         }
     }
+
+    private boolean checkAllowedPackaging(){
+
+        // Read the packaging type of the target project (e.g., "jar", "war", "pom")
+        String packaging = project.getPackaging();
+
+        List<String> allowedPackaging = List.of( "jar" , "war");
+
+        if (packaging == null || !allowedPackaging.contains(packaging.toLowerCase())){
+            getLog().info("Skipping architecture check: packaging '" + packaging + "' is not supported.");
+            return false;
+        }
+
+        return true;
+    }
+
+
 }
