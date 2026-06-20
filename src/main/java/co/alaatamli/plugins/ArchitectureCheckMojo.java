@@ -124,10 +124,10 @@ public class ArchitectureCheckMojo extends AbstractMojo {
 
     private boolean checkAllowedPackaging(){
 
-        // Read the packaging type of the target project (e.g., "jar", "war", "pom")
+        // Read the packaging type of the target project , example [ "jar", "war", "pom"]
         String packaging = project.getPackaging();
 
-        List<String> allowedPackaging = List.of( "jar" , "war");
+        List<String> allowedPackaging = List.of( "jar" , "war" , "ear");
 
         if (packaging == null || !allowedPackaging.contains(packaging.toLowerCase())){
             getLog().info("Skipping architecture check: packaging '" + packaging + "' is not supported.");
